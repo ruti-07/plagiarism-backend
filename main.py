@@ -23,8 +23,8 @@ def check_text(data: InputText):
 
     reference_text = "This is a sample reference for similarity checking."
 
-    # 🔄 Lazy-load the model inside the route
-    model = SentenceTransformer('all-MiniLM-L6-v2')
+    # ✅ Use a smaller, memory-optimized model
+    model = SentenceTransformer('paraphrase-albert-small-v2')
     query_embedding = model.encode(data.text, convert_to_tensor=True)
     reference_embedding = model.encode(reference_text, convert_to_tensor=True)
     score = util.pytorch_cos_sim(query_embedding, reference_embedding).item()
@@ -35,7 +35,7 @@ def check_text(data: InputText):
 
     return {"similarity_score": round(score, 4)}
 
-# 🔧 Ensures Render binds to the right port
+# 🔧 For Render: ensures it binds to the correct host and port
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=10000)
